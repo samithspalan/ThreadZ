@@ -1,11 +1,12 @@
 import express from 'express';
 const router = express.Router();
+import { signup } from '../controllers/auth.controller.js';
+import { login } from '../controllers/auth.controller.js';
 
-router.get('/', (req, res) => {
-    res.send('Hello, world!');
-});
+router.post('/signup', signup);
 
-// Example additional route
+router.get('/login', login);
+
 router.get('/about', (req, res) => {
     res.send('About page');
 });
