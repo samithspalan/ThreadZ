@@ -13,6 +13,52 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Make document fill viewport and avoid scroll revealing gaps */
+html, body, #root {
+  height: 100%;
+}
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow: hidden; /* prevent scroll showing top/bottom */
+}
+
+/* Spline background layering */
+#root {
+  position: relative;
+  min-height: 100vh;
+}
+
+.spline-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Force the Spline canvas to cover the viewport fully */
+.spline-bg canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  /* Slightly brighter while still subdued */
+  filter: brightness(0.9) contrast(0.72) saturate(0.8);
+}
+
+.bg-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.14); /* lighter, subtle white tint */
+  z-index: 0.5; /* between .spline-bg (0) and .app-content (2) */
+  pointer-events: none; /* don't block clicks */
+}
+
+.app-content {
+  position: relative;
+  z-index: 2; /* above overlay */
+  background: transparent;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -20,19 +66,6 @@ a {
 }
 a:hover {
   color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
 }
 
 button {
