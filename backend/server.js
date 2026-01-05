@@ -4,6 +4,7 @@ import process from 'process';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import authRoutes from './src/routes/auth.js';
+import messageroutes from './src/routes/message.route.js';
 import db from './src/lib/db.js';
 import cookieParser from 'cookie-parser';
 
@@ -14,6 +15,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/', authRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/message',messageroutes);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
