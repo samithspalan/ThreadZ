@@ -1,15 +1,17 @@
 import express from 'express';
 const router = express.Router();
 import { signup } from '../controllers/auth.controller.js';
-import { login ,logout} from '../controllers/auth.controller.js';
-
+import { login ,logout,updateprofile} from '../controllers/auth.controller.js';
+import { finduser } from '../middleware/auth.middleware.js';
 router.post('/signup', signup);
 
 router.post('/login', login);
 
 router.post('/logout', logout);
 
-router.get('/about', (req, res) => {
-    res.send('About page');
+router.put('/update-profile',finduser,updateprofile);
+
+router.get('/check',finduser,(req,res)=>{
+    res.status(200).json({user:req.user});
 });
 export default router;

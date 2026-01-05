@@ -5,11 +5,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import authRoutes from './src/routes/auth.js';
 import db from './src/lib/db.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/', authRoutes);
 
