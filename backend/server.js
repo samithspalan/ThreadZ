@@ -7,11 +7,16 @@ import authRoutes from './src/routes/auth.js';
 import messageroutes from './src/routes/message.route.js';
 import db from './src/lib/db.js';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
+app.use(cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+}));
 app.use(cookieParser());
 
 app.use('/', authRoutes);

@@ -1,11 +1,11 @@
 import React from 'react'
 
-function chatpage() {
+function Chatpage() {
   return (
     <div>
-      
+      chatpage
     </div>
   )
 }
 
-export default chatpage
+export default Chatpage
