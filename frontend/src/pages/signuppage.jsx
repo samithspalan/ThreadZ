@@ -4,7 +4,7 @@ import { MessageCircleIcon, UserIcon, MailIcon, LockIcon, LoaderIcon } from 'luc
 import BorderAnimatedContainer from '../components/BorderAnimatedContainer.jsx'
 import {useAuthStore} from '../store/useauthstore'
 function SignUpPage() {
-  const [formData, setFormData] = useState({ fullName: "", email: "", password: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const { signup, isSigningUp } = useAuthStore();
 
   const handleSubmit = (e) => {
@@ -14,7 +14,7 @@ function SignUpPage() {
 
   return (
     <div className="w-full flex items-center justify-center p-4 bg-slate-900">
-      <div className="relative w-full  max-w-6xl md:h-[800px] h-[650px]">
+      <div className="relative w-full  max-w-6xl h-screen">
         <BorderAnimatedContainer>
           <div className="w-full flex flex-col md:flex-row">
             {/* FORM CLOUMN - LEFT SIDE */}
@@ -37,8 +37,8 @@ function SignUpPage() {
 
                       <input
                         type="text"
-                        value={formData.fullName}
-                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="input"
                         placeholder="John Doe"
                       />

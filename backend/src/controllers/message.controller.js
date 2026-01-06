@@ -1,11 +1,13 @@
-import user from '../model/User.js';
+import User from '../model/User.js';
 import Message from '../model/message.js';
+import cloudinary from '../lib/cloudinary.js';
 
 export const getcontacts=async(req,res)=>{
     try {
-        loggedinUserId=req.user._id;
-    filtereduserIds=await user.find({_id:{$ne:loggedinUserId}}).select('-password');
-    res.status(200).json(filtereduserIds);}
+    const loggedinUserId = req.user._id;
+    const filtereduserIds = await User.find({ _id: { $ne: loggedinUserId } }).select('-password');
+    res.status(200).json(filtereduserIds);
+  }
     catch (error) {
         console.error('Error fetching contacts:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -16,7 +18,7 @@ export const getcontacts=async(req,res)=>{
 export const getmessages=async(req,res)=>{
       try {
     const myId = req.user._id;
-    const { id: userToChatId } = req.params;
+    const { userId: userToChatId } = req.params;
 
     const messages = await Message.find({
       $or: [

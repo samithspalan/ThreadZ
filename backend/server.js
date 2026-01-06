@@ -12,7 +12,7 @@ import cors from 'cors';
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 app.use(cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
@@ -25,9 +25,9 @@ app.use('/message',messageroutes);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
+app.use(express.static(path.join(__dirname, '../frontend/')));
 app.use((req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 app.listen(port, async () => {
     console.log(`Server is running at http://localhost:${port}`);

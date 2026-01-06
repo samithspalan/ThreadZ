@@ -1,6 +1,6 @@
 import "dotenv/config";
 import User from '../model/User.js';
-
+import jwt from 'jsonwebtoken';
 export const finduser=async(req,res,next)=>{
     try {
         const token = req.cookies.token;

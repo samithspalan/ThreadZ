@@ -1,5 +1,5 @@
 import { generateToken } from '../lib/Utils.js';
-import user from '../model/User.js';
+import User from '../model/User.js';
 import bcrypt from 'bcryptjs';
 import { sendWelcomeEmail } from '../email/emailhandlers.js';
 import "dotenv/config";
@@ -16,23 +16,23 @@ export const signup = async (req, res) => {
     if(!/\S+@\S+\.\S+/.test(email)){
         return res.status(400).json({ message: 'Invalid email format' });
     }
-    const existingUser = await user.findOne({ email });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
         return res.status(400).json({ message: 'Email already in use' });
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     
-    const newUser = new user({ name, email, password: hashedPassword });
+    const newUser = new User({ name, email, password: hashedPassword });
     if(newUser){
         generateToken(newUser._id,res);
         const savedUser = await newUser.save();
         res.status(201).json({ message: 'User registered successfully' });
-       try{
-        await sendWelcomeEmail(savedUser.email, savedUser.name, process.env.CLIENT_URL);
-       } catch (error) {
-           console.error('Error sending welcome email:', error);
-       }
+      //  try{
+      //   await sendWelcomeEmail(savedUser.email, savedUser.name, process.env.CLIENT_URL);
+      //  } catch (error) {
+      //      console.error('Error sending welcome email:', error);
+      //  }
     } else {
         res.status(500).json({ message: 'Error creating user' });
     }
@@ -67,7 +67,7 @@ export const login = async (req, res) => {
     // 4. Send safe user data
     res.status(200).json({
       _id: user._id,
-      fullName: user.fullName,
+      name: user.name,
       email: user.email,
       profilePic: user.profilePic,
     });
@@ -78,10 +78,11 @@ export const login = async (req, res) => {
   }
 };
 export function logout (_, res) {
-    res.clearCookie('jwt', {
+    res.clearCookie('token', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        path: '/'
     });
     res.status(200).json({ message: 'Logged out successfully' });
 }   
@@ -92,9 +93,9 @@ export const updateprofile=async(req,res)=>{
         if(!profilePic){
             return res.status(400).json({ message: 'Profile picture is required' });
         }   
-        const user = await user.findById(req.user._id);
+        const user = await User.findById(req.user._id);
         const uploadResult = await cloudinary.uploader.upload(profilePic); 
-        const Updateduser = await user.findByIdAndUpdate(req.user._id, {
+        const Updateduser = await User.findByIdAndUpdate(req.user._id, {
             profilePic: uploadResult.secure_url,
         }, { new: true });
         res.status(200).json({ message: 'Profile updated successfully', profilePic: Updateduser.profilePic });
