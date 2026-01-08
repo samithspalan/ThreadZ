@@ -1,21 +1,36 @@
-import { useEffect} from "react";
-import { useChatStore } from "../store/useChatStore";
+import { useEffect, useRef } from "react";
 import { useAuthStore } from "../store/useauthstore";
-import ChatHeader from "./chatHeader.jsx";
-import NoChatHistoryPlaceholder from "./NoChatHistoryPlaceholder.jsx";
-import MessageInput from "./MessageInput.jsx";
+import { useChatStore } from "../store/useChatStore";
+import ChatHeader from "./ChatHeader";
+import NoChatHistoryPlaceholder from "./NoChatHistoryPlaceholder";
+import MessageInput from "./MessageInput";
+import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
 
-export default function ChatContainer() {
-  const{ getMessageByUserId,selectedUser,messages,isMessagesLoading,subscribeToMessages,
-    unsubscribeFromMessages, } = useChatStore();
+function ChatContainer() {
+  const {
+    selectedUser,
+    getMessagesByUserId,
+    messages,
+   
+  } = useChatStore();
   const { authUser } = useAuthStore();
+  const messageEndRef = useRef(null);
+
+
+
+
   useEffect(() => {
-      getMessageByUserId(selectedUser._id);
-    },[selectedUser, getMessageByUserId]);
-    return<>
-    <ChatHeader/>
-    <div className="flex-1 px-6 overflow-y-auto py-8 message-area">
-      {messages && messages.length > 0 ? (<div className="max-w-3xl mx-auto space-y-6">
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  return (
+    <>
+      <ChatHeader />
+      <div className="flex-1 px-6 overflow-y-auto py-8">
+        {messages.length > 0 && !isMessagesLoading ? (
+          <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((msg) => (
               <div
                 key={msg._id}
@@ -24,25 +39,36 @@ export default function ChatContainer() {
                 <div
                   className={`chat-bubble relative ${
                     msg.senderId === authUser._id
-                      ? "from-me bg-cyan-600 text-white"
-                      : "from-them bg-slate-800 text-slate-200"
+                      ? "bg-cyan-600 text-white"
+                      : "bg-slate-800 text-slate-200"
                   }`}
-                 >
+                >
                   {msg.image && (
                     <img src={msg.image} alt="Shared" className="rounded-lg h-48 object-cover" />
                   )}
                   {msg.text && <p className="mt-2">{msg.text}</p>}
                   <p className="text-xs mt-1 opacity-75 flex items-center gap-1">
-                    </p>
-                    </div>
+                    {new Date(msg.createdAt).toLocaleTimeString(undefined, {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                </div>
               </div>
             ))}
+            {/* 👇 scroll target */}
+            <div ref={messageEndRef} />
           </div>
-      ) : (
-        <NoChatHistoryPlaceholder name={selectedUser.name} />
-      )}
-        </div>
-<MessageInput />
-    </> 
+        ) : isMessagesLoading ? (
+          <MessagesLoadingSkeleton />
+        ) : (
+          <NoChatHistoryPlaceholder name={selectedUser.name} />
+        )}
+      </div>
 
+      <MessageInput />
+    </>
+  );
 }
+
+export default ChatContainer;
