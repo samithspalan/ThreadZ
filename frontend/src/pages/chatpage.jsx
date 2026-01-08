@@ -15,7 +15,7 @@ function ChatPage() {
     <div className="relative w-full max-w-6xl h-[calc(100vh-2rem)] max-h-[calc(100vh-2rem)]">
       <BorderAnimatedContainer>
        
-        <div className="w-80 bg-slate-800/50 backdrop-blur-sm flex flex-col">
+        <div className="w-80 bg-slate-800/50 backdrop-blur-sm flex flex-col panel-left">
           <ProfileHeader />
           <ActiveTabSwitch />
 
@@ -25,7 +25,7 @@ function ChatPage() {
         </div>
 
       
-        <div className="flex-1 flex flex-col bg-slate-900/50 backdrop-blur-sm">
+        <div className="flex-1 flex flex-col bg-slate-900/50 backdrop-blur-sm panel-right">
           {selectedUser ? <ChatContainer /> : <NoConversationPlaceholder />}
         </div>
       </BorderAnimatedContainer>
