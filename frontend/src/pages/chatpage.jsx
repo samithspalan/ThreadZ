@@ -15,7 +15,10 @@ function ChatPage() {
     <div className="relative w-full max-w-6xl h-[calc(100vh-2rem)] max-h-[calc(100vh-2rem)]">
       <BorderAnimatedContainer>
        
-        <div className="w-80 bg-slate-800/50 backdrop-blur-sm flex flex-col panel-left">
+        {/* Left Panel - Hide on mobile when user is selected */}
+        <div className={`w-full md:w-80 bg-slate-800/50 backdrop-blur-sm flex flex-col panel-left ${
+          selectedUser ? 'hidden md:flex' : 'flex'
+        }`}>
           <ProfileHeader />
           <ActiveTabSwitch />
 
@@ -25,7 +28,10 @@ function ChatPage() {
         </div>
 
       
-        <div className="flex-1 flex flex-col bg-slate-900/50 backdrop-blur-sm panel-right">
+        {/* Right Panel - Full width on mobile when user is selected */}
+        <div className={`flex-1 flex flex-col bg-slate-900/50 backdrop-blur-sm panel-right ${
+          selectedUser ? 'flex' : 'hidden md:flex'
+        }`}>
           {selectedUser ? <ChatContainer /> : <NoConversationPlaceholder />}
         </div>
       </BorderAnimatedContainer>

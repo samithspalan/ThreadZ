@@ -66,6 +66,14 @@ export const sendmessage = async (req, res) => {
     });
 
     await newMessage.save();
+    
+    // Emit socket event to receiver in real-time
+    const { getReceiverSocketId, io } = await import('../lib/socket.js');
+    const receiverSocketId = getReceiverSocketId(receiverId.toString());
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
+    
     res.status(201).json(newMessage);
   } catch (error) {
     console.log("Error in sendMessage controller: ", error.message);
