@@ -8,14 +8,12 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://your-frontend.onrender.com"
-  ],
-  credentials: true
-}));
-
+const io = new Server(server, {
+  cors: {
+    origin: [process.env.CLIENT_URL],
+    credentials: true,
+  },
+});
 
 // apply authentication middleware to all socket connections
 io.use(socketAuthMiddleware);
