@@ -84,7 +84,8 @@ export const login = async (req, res) => {
   }
 };
 export function logout (_, res) {
-    const isProduction = process.env.NODE_ENV === 'production';
+    const envValue = process.env.NODE_ENV || process.env.node_env;
+    const isProduction = envValue === 'production';
     
     res.clearCookie('token', {
         httpOnly: true,
@@ -93,7 +94,7 @@ export function logout (_, res) {
         path: '/'
     });
     res.status(200).json({ message: 'Logged out successfully' });
-}   
+}
 
 export const updateprofile=async(req,res)=>{
     try {

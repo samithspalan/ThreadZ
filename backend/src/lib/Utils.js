@@ -6,7 +6,9 @@ export const generateToken = (id,res) => {
             expiresIn: '10d',
         });
         
-        const isProduction = process.env.NODE_ENV === 'production';
+        // Support both NODE_ENV and legacy node_env to avoid misconfig on hosts
+        const envValue = process.env.NODE_ENV || process.env.node_env;
+        const isProduction = envValue === 'production';
         
         res.cookie('token', token, {
             httpOnly: true,
@@ -14,7 +16,7 @@ export const generateToken = (id,res) => {
             maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
             sameSite: isProduction ? "none" : "lax", // Use 'lax' for development, 'none' for production cross-site
             path: '/',
-            domain: isProduction ? undefined : undefined // Let browser handle domain
+            domain: undefined // Let browser handle domain
         });
         return token;
     };
