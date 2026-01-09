@@ -27,7 +27,12 @@ export const signup = async (req, res) => {
     if(newUser){
         generateToken(newUser._id,res);
         const savedUser = await newUser.save();
-        res.status(201).json({ message: 'User registered successfully' });
+        res.status(201).json({
+            _id: savedUser._id,
+            name: savedUser.name,
+            email: savedUser.email,
+            profilePic: savedUser.profilePic,
+        });
       //  try{
       //   await sendWelcomeEmail(savedUser.email, savedUser.name, process.env.CLIENT_URL);
       //  } catch (error) {
