@@ -6,7 +6,7 @@ import { useAuthStore } from "../store/useauthstore";
 
 function ChatsList() {
   const { getMyChatPartners, chats, isUsersLoading, setSelectedUser } = useChatStore();
-  
+    const { onlineUsers } = useAuthStore();
   useEffect(() => {
     getMyChatPartners();
   }, [getMyChatPartners]);
@@ -23,7 +23,7 @@ function ChatsList() {
           onClick={() => setSelectedUser(chat)}
         >
           <div className="flex items-center gap-3">
-            <div className={'avatar online'}>
+            <div className={`avatar ${onlineUsers.includes(chat._id) ? "online" : "offline"}`}>
               <div className="size-12 rounded-full">
                 <img src={chat.profilePic || "/avatar.png"} alt={chat.name} />
               </div>

@@ -9,15 +9,19 @@ import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
 function ChatContainer() {
   const {
     selectedUser,
-    getMessagesByUserId,
+    getMessageByUserId,
     messages,
    
   } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
 
-
-
+  // Fetch messages when selectedUser changes
+  useEffect(() => {
+    if (selectedUser?._id) {
+      getMessageByUserId(selectedUser._id);
+    }
+  }, [selectedUser?._id, getMessageByUserId]);
 
   useEffect(() => {
     if (messageEndRef.current) {
@@ -29,7 +33,7 @@ function ChatContainer() {
     <>
       <ChatHeader />
       <div className="flex-1 px-6 overflow-y-auto py-8">
-        {messages.length > 0 && !isMessagesLoading ? (
+        {messages.length > 0 ? (
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((msg) => (
               <div
@@ -59,8 +63,6 @@ function ChatContainer() {
             {/* 👇 scroll target */}
             <div ref={messageEndRef} />
           </div>
-        ) : isMessagesLoading ? (
-          <MessagesLoadingSkeleton />
         ) : (
           <NoChatHistoryPlaceholder name={selectedUser.name} />
         )}

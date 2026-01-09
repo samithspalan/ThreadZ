@@ -17,7 +17,7 @@ export const useChatStore = create((set, get) => ({
    getAllContacts: async () => {
     set({ isUsersLoading: true });
     try {
-      const res = await axiosInstance.get("/message/contacts");
+      const res = await axiosInstance.get("/api/messages/contacts");
       const data = Array.isArray(res.data) ? res.data : [];
       set({ allContacts: data });
     } catch (error) {
@@ -29,7 +29,7 @@ export const useChatStore = create((set, get) => ({
   getMyChatPartners: async () => {
     set({ isUsersLoading: true });
     try {
-      const res = await axiosInstance.get("/message/chats");
+      const res = await axiosInstance.get("/api/messages/chats");
       console.log("chat response:", res.data);
       const data = Array.isArray(res.data) ? res.data : [];
       set({ chats: data });
@@ -42,7 +42,7 @@ export const useChatStore = create((set, get) => ({
   getMessageByUserId: async (userId) => {
     set({ isMessagesLoading: true });
     try{
-      const res = await axiosInstance.get(`/message/${userId}`);
+      const res = await axiosInstance.get(`/api/messages/${userId}`);
       const data = Array.isArray(res.data) ? res.data : [];
       set({ messages: data });
     }
@@ -73,11 +73,12 @@ export const useChatStore = create((set, get) => ({
     set({ messages: [...messages, optimisticMessage] });
 
     try {
-      const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
-      set({ messages: messages.concat(res.data) });
+      const res = await axiosInstance.post(`/api/messages/send/${selectedUser._id}`, messageData);
+      // Replace optimistic message with real message from server
+      set({ messages: [...messages, res.data] });
     } catch (error) {
       // remove optimistic message on failure
-      set({ messages: messages });
+      set({ messages: messages.filter(m => m._id !== tempId) });
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   },
