@@ -38,9 +38,9 @@ function ChatContainer() {
   return (
     <div className="flex flex-col h-full w-full">
       <ChatHeader />
-      <div className="flex-1 px-4 md:px-6 overflow-y-auto py-8">
+      <div className="flex-1 px-4 md:px-6 overflow-y-auto overflow-x-hidden py-8">
         {messages.length > 0 ? (
-          <div className="max-w-3xl mx-auto space-y-6">
+          <div className="max-w-full md:max-w-3xl mx-auto space-y-6">
             {messages.map((msg) => (
               <div
                 key={msg._id}
@@ -51,10 +51,10 @@ function ChatContainer() {
                     msg.senderId === authUser._id
                       ? "bg-cyan-600 text-white"
                       : "bg-slate-800 text-slate-200"
-                  }`}
+                  } max-w-[85vw] md:max-w-[70%] break-words whitespace-pre-wrap`}
                 >
                   {msg.image && (
-                    <img src={msg.image} alt="Shared" className="rounded-lg h-48 object-cover" />
+                    <img src={msg.image} alt="Shared" className="rounded-lg max-w-full h-auto max-h-64 object-cover" />
                   )}
                   {msg.text && <p className="mt-2">{msg.text}</p>}
                   <p className="text-xs mt-1 opacity-75 flex items-center gap-1">
