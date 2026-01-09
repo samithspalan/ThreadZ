@@ -9,7 +9,7 @@ export const generateToken = (id,res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
-            sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             path: '/' // Ensure cookie is sent with all requests
         });
         return token;
