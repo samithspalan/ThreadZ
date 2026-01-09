@@ -1,4 +1,4 @@
-import { XIcon } from "lucide-react";
+import { XIcon, ArrowLeft } from "lucide-react";
 import { useChatStore } from "../store/useChatStore";
 import { useEffect } from "react";
 import { useAuthStore } from "../store/useauthstore";
@@ -23,6 +23,14 @@ function ChatHeader() {
    border-slate-700/50 max-h-[84px] px-6 flex-1 chat-header"
     >
       <div className="flex items-center space-x-3">
+        {/* Back button - only visible on mobile */}
+        <button 
+          onClick={() => setSelectedUser(null)}
+          className="md:hidden mr-2"
+        >
+          <ArrowLeft className="w-6 h-6 text-slate-400 hover:text-slate-200 transition-colors" />
+        </button>
+        
         <div className={`avatar ${isOnline ? "online" : "offline"}`}>
           <div className="w-12 rounded-full">
             <img src={selectedUser.profilePic || "/avatar.png"} alt={selectedUser.name} />
@@ -35,7 +43,8 @@ function ChatHeader() {
         </div>
       </div>
 
-      <button onClick={() => setSelectedUser(null)}>
+      {/* Close button - only visible on desktop */}
+      <button onClick={() => setSelectedUser(null)} className="hidden md:block">
         <XIcon className="w-5 h-5 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer" />
       </button>
     </div>
