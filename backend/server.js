@@ -15,6 +15,12 @@ const __dirname = path.resolve();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: "5mb" })); // req.body
+app.use(cors({ 
+  origin: process.env.CLIENT_URL, 
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
