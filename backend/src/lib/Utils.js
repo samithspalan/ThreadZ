@@ -5,12 +5,16 @@ export const generateToken = (id,res) => {
         const token = jwt.sign({ id }, process.env.JWT_SECRET, {
             expiresIn: '10d',
         });
+        
+        const isProduction = process.env.NODE_ENV === 'production';
+        
         res.cookie('token', token, {
             httpOnly: true,
-            secure: true,
+            secure: isProduction, // Only use secure in production (HTTPS)
             maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
-            sameSite: "none",
-            path: '/' // Ensure cookie is sent with all requests
+            sameSite: isProduction ? "none" : "lax", // Use 'lax' for development, 'none' for production cross-site
+            path: '/',
+            domain: isProduction ? undefined : undefined // Let browser handle domain
         });
         return token;
     };

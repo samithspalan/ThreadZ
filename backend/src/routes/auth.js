@@ -1,7 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { signup } from '../controllers/auth.controller.js';
-import { login ,logout,updateprofile} from '../controllers/auth.controller.js';
+import { signup, login, logout, updateprofile, checkAuthStatus } from '../controllers/auth.controller.js';
 import { finduser } from '../middleware/auth.middleware.js';
 import { arcjetprotection } from '../middleware/arcjet.middleware.js';
 // router.use(arcjetprotection);
@@ -13,7 +12,6 @@ router.post('/logout', logout);
 
 router.put('/update-profile',finduser,updateprofile);
 
-router.get('/check',finduser,(req,res)=>{
-    res.status(200).json(req.user);
-});
+router.get('/check', checkAuthStatus);
+
 export default router;

@@ -1,6 +1,7 @@
 import { generateToken } from '../lib/Utils.js';
 import User from '../model/User.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import { sendWelcomeEmail } from '../email/emailhandlers.js';
 import "dotenv/config";
 import cloudinary from '../lib/cloudinary.js';
@@ -83,10 +84,12 @@ export const login = async (req, res) => {
   }
 };
 export function logout (_, res) {
+    const isProduction = process.env.NODE_ENV === 'production';
+    
     res.clearCookie('token', {
         httpOnly: true,
-        secure: true,
-        sameSite: 'none',
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
         path: '/'
     });
     res.status(200).json({ message: 'Logged out successfully' });
@@ -110,3 +113,33 @@ export const updateprofile=async(req,res)=>{
         res.status(500).json({ message: 'Internal server error' });
     }   
 }
+
+// Debug endpoint to check auth status
+export const checkAuthStatus = async (req, res) => {
+    try {
+        const token = req.cookies.token;
+        console.log('Check auth - Has token:', !!token);
+        console.log('Check auth - Cookies received:', Object.keys(req.cookies));
+        
+        if (!token) {
+            return res.status(401).json({ message: 'No token found' });
+        }
+        
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id).select('-password');
+        
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        
+        res.status(200).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            profilePic: user.profilePic,
+        });
+    } catch (error) {
+        console.error('Check auth error:', error);
+        res.status(401).json({ message: 'Authentication failed' });
+    }
+};
