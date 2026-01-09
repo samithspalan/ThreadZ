@@ -7,9 +7,9 @@ export const generateToken = (id,res) => {
         });
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: true,
             maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            sameSite: "none",
             path: '/' // Ensure cookie is sent with all requests
         });
         return token;
