@@ -32,8 +32,16 @@ io.on("connection", (socket) => {
   const userId = socket.userId;
   userSocketMap[userId] = socket.id;
 
-  // io.emit() is used to send events to all connected clients
+  // Send the current list of online users to this newly connected client
+  socket.emit("getOnlineUsers", Object.keys(userSocketMap));
+  
+  // Broadcast to all clients that user count has changed
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
+
+  // Handle explicit request for online users
+  socket.on("requestOnlineUsers", () => {
+    socket.emit("getOnlineUsers", Object.keys(userSocketMap));
+  });
 
   // with socket.on we listen for events from clients
   socket.on("disconnect", () => {

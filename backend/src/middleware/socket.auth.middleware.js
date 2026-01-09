@@ -24,7 +24,7 @@ export const socketAuthMiddleware = async (socket, next) => {
     }
 
     // find the user fromdb
-    const user = await User.findById(decoded.userId).select("-password");
+    const user = await User.findById(decoded.id).select("-password");
     if (!user) {
       console.log("Socket connection rejected: User not found");
       return next(new Error("User not found"));
