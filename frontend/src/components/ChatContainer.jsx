@@ -50,7 +50,7 @@ function ChatContainer() {
                   className={`chat-bubble relative ${
                     msg.senderId === authUser._id
                       ? "bg-cyan-600 text-white"
-                      : "bg-slate-800 text-slate-200"
+                      : "bg-slate-800 dark:bg-slate-800 text-white dark:text-slate-200"
                   } max-w-[78vw] md:max-w-[70%] break-words whitespace-pre-wrap p-3 md:p-4 text-sm md:text-base rounded-xl md:rounded-2xl`}
                 >
                   {msg.image && (

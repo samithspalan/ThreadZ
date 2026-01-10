@@ -12,9 +12,9 @@ export const generateToken = (id,res) => {
 
         const cookieOptions = {
             httpOnly: true,
-            secure: isProduction, // Only use secure in production (HTTPS)
+            secure: true, // Only use secure in production (HTTPS)
             maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
-            sameSite: isProduction ? "none" : "lax", // Use 'lax' for development, 'none' for production cross-site
+            sameSite: "none", // Use 'lax' for development, 'none' for production cross-site
             path: '/',
             domain: undefined // Let browser handle domain
         };
