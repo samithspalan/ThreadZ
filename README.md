@@ -1,4 +1,4 @@
-# Threadz - Real-Time Chat App
+# Threadz - Real-Time Chat App.
 
 A production-ready full-stack chat application featuring JWT authentication, real-time messaging, and modern integrations. Live demo: [https://threadz-app.onrender.com/](https://threadz-app.onrender.com/)
 
